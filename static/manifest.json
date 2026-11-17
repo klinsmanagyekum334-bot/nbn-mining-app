@@ -1,0 +1,20 @@
+{
+  "name": "N.B.N Mining App",
+  "short_name": "NBN Mining",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1c1824",
+  "theme_color": "#fbbf24",
+  "icons": [
+    {
+      "src": "/static/mining1.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/static/mining1.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

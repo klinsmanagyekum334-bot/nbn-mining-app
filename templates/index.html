@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N.B.N Mining App</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #23202b; display: flex; justify-content: center; min-height: 100vh; color: #e2e8f0; }
+        .app-container { width: 100%; max-width: 414px; background-color: #1c1824; position: relative; padding-bottom: 90px; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px; padding-top: 30px; }
+        .logo-area { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { font-size: 28px; }
+        .logo-area h1 { font-size: 26px; font-weight: 900; color: #fbbf24; letter-spacing: -0.5px; text-transform: uppercase; }
+        .header-icons { display: flex; align-items: center; gap: 15px; font-size: 20px; color: #cbd5e1; }
+        .profile-pic { width: 32px; height: 32px; background-color: #423a52; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid #fbbf24; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+
+        .greeting { padding: 0 20px 20px 20px; }
+        .greeting h2 { font-size: 24px; font-weight: 700; margin-bottom: 5px; color: #f8fafc; }
+        .greeting p { font-size: 14px; color: #cbd5e1; }
+
+        .hero-slider { margin: 0 20px 25px 20px; height: 140px; border-radius: 16px; position: relative; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.5); background-color: #000; border: 1px solid #423a52; }
+        .hero-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out; }
+        .hero-image.active { opacity: 1; }
+
+        .section-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 15px; }
+        .section-header h3 { font-size: 20px; font-weight: 700; color: #f8fafc; }
+        .section-header a { color: #fbbf24; font-size: 14px; font-weight: 600; text-decoration: none; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; margin-bottom: 25px; }
+        .op-card { background: #2d2738; border-radius: 16px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid #423a52; text-decoration: none; display: block; color: inherit; transition: 0.2s; }
+        .op-card:hover { transform: translateY(-2px); border-color: #fbbf24; }
+        .icon-circle { width: 35px; height: 35px; background-color: #423a52; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 12px; font-size: 16px; color: #fbbf24; }
+        .op-card h4 { font-size: 16px; font-weight: 700; color: #fbbf24; margin-bottom: 4px; }
+        .op-card p { font-size: 11px; color: #cbd5e1; font-weight: 500; }
+
+        .recovery-card { background: #2d2738; margin: 0 20px 25px 20px; padding: 20px; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 1px solid #423a52; }
+        .rec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .rec-header h4 { font-size: 16px; font-weight: 700; color: #f8fafc; }
+        .rec-header span { font-size: 14px; font-weight: 600; color: #cbd5e1; }
+        .rec-value { font-size: 24px; font-weight: 800; color: #fbbf24; margin-bottom: 10px; }
+        .progress-bg { width: 100%; height: 8px; background-color: #423a52; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: #fbbf24; border-radius: 10px; }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); max-width: 414px; width: 100%; z-index: 1000; background: #1c1824; display: flex; justify-content: space-around; padding: 15px 10px; border-top-left-radius: 20px; border-top-right-radius: 20px; box-shadow: 0 -4px 15px rgba(0,0,0,0.5); border-top: 1px solid #423a52; }
+        .bottom-nav a { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 10px; font-weight: 600; color: #cbd5e1; }
+        .bottom-nav a.active { color: #fbbf24; }
+        .bottom-nav a span { font-size: 20px; }
+    </style>
+<link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#fbbf24">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="logo-area">
+                <span class="logo-icon">🪙</span>
+                <h1>N.B.N Mining App</h1>
+            </div>
+            <div class="header-icons">
+                <a href="/fraud_prevention" style="text-decoration:none; color:#cbd5e1;">🛡️</a>
+                <a href="/logout" style="text-decoration:none; font-size:18px; color:#ef4444; margin-left:10px;" title="Log Out">🚪</a>
+            </div>
+        </div>
+
+        <div class="greeting">
+            <h2>Good morning, Admin</h2>
+            <p>Here is today's overview for your operations</p>
+        </div>
+
+        <div class="hero-slider">
+            <img src="/static/mining1.jpeg" alt="Mining Site 1" class="hero-image active">
+            <img src="/static/mining2.jpeg" alt="Mining Site 2" class="hero-image">
+            <img src="/static/mining3.jpeg" alt="Mining Site 3" class="hero-image">
+            <img src="/static/mining4.jpg" alt="Mining Site 4" class="hero-image">
+        </div>
+
+        <div class="section-header">
+            <h3>Management</h3>
+            <a href="/logistics">See all ></a>
+        </div>
+        <div class="grid-2">
+            <a href="/logistics" class="op-card">
+                <div class="icon-circle">🚚</div>
+                <h4>Logistics</h4>
+                <p>Sites & Equipment</p>
+            </a>
+            <a href="/workers" class="op-card">
+                <div class="icon-circle">👷</div>
+                <h4>Workers</h4>
+                <p>Attendance</p>
+            </a>
+        </div>
+
+        <div class="recovery-card">
+            <div class="rec-header">
+                <h4>Recovery Rate</h4>
+                <span>Target: 100%</span>
+            </div>
+            <div class="rec-value">92.4%</div>
+            <div class="progress-bg">
+                <div class="progress-fill" style="width: 92.4%;"></div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="/" class="active"><span>🏠</span>Home</a>
+            <a href="/logistics"><span>🚚</span>Logistics</a>
+            <a href="/workers"><span>👷</span>Workers</a>
+            <a href="/fraud_prevention"><span>🛡️</span>Fraud Prev.</a>
+            <a href="/earnings"><span>📊</span>Reports</a>
+        </div>
+    </div>
+    <script>
+        const images = document.querySelectorAll('.hero-image');
+        let currentIndex = 0;
+        setInterval(() => {
+            images[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % images.length;
+            images[currentIndex].classList.add('active');
+        }, 3000);
+    </script>
+<script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/service-worker.js");
+        }
+    </script>
+</body>
+</html>

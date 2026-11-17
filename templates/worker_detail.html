@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Profile - NBN Mining</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #23202b; display: flex; justify-content: center; min-height: 100vh; color: #e2e8f0; }
+        .app-container { width: 100%; max-width: 414px; background-color: #1c1824; min-height: 100vh; padding-bottom: 30px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+
+        .header { display: flex; align-items: center; gap: 10px; padding: 20px; padding-top: 30px; }
+        .header h1 { font-size: 20px; font-weight: 800; color: #fbbf24; }
+        .back-btn { font-size: 24px; text-decoration: none; color: #fbbf24; }
+
+        .profile-card { background: #2d2738; margin: 0 20px 20px 20px; padding: 20px; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center; border: 1px solid #423a52; }
+        .profile-pic { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; background: #423a52; margin: 0 auto 15px auto; display: flex; justify-content: center; align-items: center; font-size: 40px; border: 3px solid #fbbf24; }
+        
+        .form-group { text-align: left; margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #423a52; background: #1c1824; color: white; border-radius: 8px; font-size: 14px; outline: none; }
+        .form-group input:focus { border-color: #fbbf24; }
+        
+        .save-btn { width: 100%; background: #fbbf24; color: #23202b; border: none; padding: 12px; border-radius: 8px; font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+
+        .history-title { font-size: 18px; font-weight: 700; margin: 0 20px 10px 20px; color: #fbbf24; }
+        .history-list { padding: 0 20px; }
+        .history-item { display: flex; justify-content: space-between; align-items: center; background: #2d2738; padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #423a52; }
+        .history-date { font-size: 15px; font-weight: 600; color: #e2e8f0; }
+        
+        .badge-present { background: #166534; color: #bbf7d0; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .badge-absent { background: #991b1b; color: #fecaca; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <a href="/workers" class="back-btn">←</a>
+            <h1>Worker Profile</h1>
+        </div>
+
+        <div class="profile-card">
+            {% if worker['picture_url'] %}
+                <img src="{{ worker['picture_url'] }}" alt="Profile" class="profile-pic">
+            {% else %}
+                <div class="profile-pic">👤</div>
+            {% endif %}
+
+            <form method="POST">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" value="{{ worker['name'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Work ID</label>
+                    <input type="text" name="work_id" value="{{ worker['work_id'] or '' }}" placeholder="e.g., NBN-001">
+                </div>
+                <div class="form-group">
+                    <label>Contact Phone</label>
+                    <input type="text" name="contact" value="{{ worker['contact'] or '' }}" placeholder="e.g., 054...">
+                </div>
+                <div class="form-group">
+                    <label>Profile Picture URL</label>
+                    <input type="url" name="picture_url" value="{{ worker['picture_url'] or '' }}" placeholder="Paste image link here">
+                </div>
+                <button type="submit" class="save-btn">Update Details</button>
+            </form>
+        </div>
+
+        <h2 class="history-title">Attendance History</h2>
+        <div class="history-list">
+            {% if history %}
+                {% for record in history %}
+                <div class="history-item">
+                    <div class="history-date">{{ record['date'] }}</div>
+                    {% if record['status'] == 'Present' %}
+                        <div class="badge-present">Present</div>
+                    {% else %}
+                        <div class="badge-absent">Absent</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="text-align:center; color:#cbd5e1;">No history yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NBN Mining App</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #1c1824; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: #e2e8f0; padding: 20px; }
+        
+        .login-container { width: 100%; max-width: 380px; background-color: #2d2738; padding: 40px 30px; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.6); border: 1px solid #423a52; text-align: center; position: relative; overflow: hidden; }
+        
+        /* Gold top border accent */
+        .login-container::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #fbbf24; }
+
+        .lock-icon { font-size: 50px; margin-bottom: 15px; display: inline-block; filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.4)); }
+        
+        .login-container h1 { font-size: 24px; font-weight: 900; color: #fbbf24; margin-bottom: 10px; letter-spacing: 1px; }
+        
+        .caution-text { font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 30px; padding: 0 10px; }
+        .caution-text span { color: #ef4444; font-weight: 700; }
+        
+        .input-group { position: relative; margin-bottom: 25px; }
+        .input-group input { width: 100%; padding: 15px 15px 15px 45px; background-color: #1c1824; border: 1px solid #423a52; border-radius: 12px; color: white; font-size: 16px; outline: none; transition: 0.3s; }
+        .input-group input:focus { border-color: #fbbf24; box-shadow: 0 0 10px rgba(251, 191, 36, 0.2); }
+        .input-group .key-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 18px; }
+        
+        .login-btn { width: 100%; padding: 15px; background: #fbbf24; color: #1c1824; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .login-btn:hover { background: #eab308; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 191, 36, 0.3); }
+
+        .error-msg { background-color: #7f1d1d; color: #fecaca; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 20px; border: 1px solid #ef4444; }
+
+        .footer-text { margin-top: 25px; font-size: 11px; color: #64748b; letter-spacing: 0.5px; }
+    </style>
+<link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#fbbf24">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="lock-icon">🔐</div>
+        <h1>N.B.N MINING APP</h1>
+        <p class="caution-text">
+            This is a management app for <strong>NBN Mining Company</strong>.<br>
+            <span>For authorized users only.</span>
+        </p>
+
+        {% if error %}
+            <div class="error-msg">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="input-group">
+                <span class="key-icon">🗝️</span>
+                <input type="password" name="password" placeholder="Enter Password" required autofocus>
+            </div>
+            <button type="submit" class="login-btn">
+                Unlock App <span>🔓</span>
+            </button>
+        </form>
+
+        <div class="footer-text">
+            SECURE ACCESS PORTAL<br>
+            &copy; 2026 NBN Mining Company
+        </div>
+    </div>
+
+</body>
+</html>

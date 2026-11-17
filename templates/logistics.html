@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics - NBN Mining</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #23202b; display: flex; justify-content: center; min-height: 100vh; color: #e2e8f0; }
+        .app-container { width: 100%; max-width: 414px; background-color: #1c1824; position: relative; padding-bottom: 80px; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px; padding-top: 30px; }
+        .logo-area { display: flex; align-items: center; gap: 8px; }
+        .logo-area h1 { font-size: 22px; font-weight: 800; color: #fbbf24; }
+        .back-btn { font-size: 24px; text-decoration: none; color: #fbbf24; }
+
+        .search-section { padding: 0 20px; margin-bottom: 15px; }
+        .search-bar { width: 100%; padding: 12px 15px; border: 1px solid #423a52; background: #2d2738; color: white; border-radius: 20px; font-size: 14px; outline: none; }
+        .search-bar:focus { border-color: #fbbf24; }
+        .search-bar::placeholder { color: #cbd5e1; }
+
+        .add-site-form { padding: 0 20px; margin-bottom: 20px; display: flex; gap: 10px; }
+        .add-site-form input { flex: 1; padding: 12px; border: 1px solid #423a52; background: #2d2738; color: white; border-radius: 8px; font-size: 14px; outline: none; }
+        .add-site-form input::placeholder { color: #cbd5e1; }
+        .add-site-form button { background: #fbbf24; color: #23202b; border: none; padding: 0 15px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+
+        .site-card { background: #2d2738; margin: 0 20px 20px 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; border: 1px solid #423a52; }
+        .site-header { background: linear-gradient(90deg, #423a52 0%, #6d28d9 100%); color: #fbbf24; padding: 15px 20px; font-size: 18px; font-weight: 800; border-bottom: 2px solid #fbbf24; }
+        
+        .equipment-list { padding: 15px 20px; }
+        .eq-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #423a52; }
+        .eq-item:last-child { border-bottom: none; }
+        .eq-name { font-size: 15px; font-weight: 600; color: #f8fafc; }
+        .eq-qty { font-size: 15px; font-weight: 800; color: #fbbf24; background: #423a52; padding: 4px 10px; border-radius: 6px; }
+        .btn-delete-eq { color: #ef4444; text-decoration: none; font-size: 18px; margin-left: 10px; }
+        
+        .add-eq-form { display: flex; gap: 8px; padding: 15px 20px; background: #1c1824; border-top: 1px solid #423a52; }
+        .add-eq-form input[type="text"] { flex: 2; padding: 10px; border: 1px solid #423a52; background: #2d2738; color: white; border-radius: 6px; font-size: 13px; outline: none; }
+        .add-eq-form input[type="number"] { flex: 1; padding: 10px; border: 1px solid #423a52; background: #2d2738; color: white; border-radius: 6px; font-size: 13px; outline: none; }
+        .add-eq-form button { background: #fbbf24; color: #23202b; border: none; padding: 0 12px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+
+        .no-data { text-align: center; color: #cbd5e1; font-size: 14px; padding: 20px; }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); max-width: 414px; width: 100%; z-index: 1000; background: #1c1824; display: flex; justify-content: space-around; padding: 15px 10px; border-top-left-radius: 20px; border-top-right-radius: 20px; box-shadow: 0 -4px 15px rgba(0,0,0,0.5); border-top: 1px solid #423a52; }
+        .bottom-nav a { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 10px; font-weight: 600; color: #cbd5e1; }
+        .bottom-nav a.active { color: #fbbf24; }
+        .bottom-nav a span { font-size: 20px; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="logo-area">
+                <a href="/" class="back-btn">←</a>
+                <h1>Logistics</h1>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <form method="GET" action="/logistics">
+                <input type="text" name="search" class="search-bar" placeholder="Search sites or equipment..." value="{{ search_query }}">
+            </form>
+        </div>
+
+        <form method="POST" class="add-site-form">
+            <input type="text" name="site_name" placeholder="New site name (e.g., Obuasi)" required>
+            <button type="submit" name="add_site">+ Site</button>
+        </form>
+
+        {% if sites %}
+            {% for site in sites %}
+            <div class="site-card">
+                <div class="site-header">📍 {{ site['name'] }}</div>
+                
+                <div class="equipment-list">
+                    {% if site['id'] in equipment %}
+                        {% for eq in equipment[site['id']] %}
+                        <div class="eq-item">
+                            <div class="eq-name">{{ eq['item'] }}</div>
+                            <div style="display: flex; align-items: center;">
+                                <div class="eq-qty">{{ eq['quantity'] }}</div>
+                                <a href="/delete_equipment/{{ eq['id'] }}" class="btn-delete-eq" onclick="return confirm('Remove this item?');">×</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="font-size: 13px; color: #cbd5e1; text-align: center; padding: 10px;">No equipment added yet.</p>
+                    {% endif %}
+                </div>
+
+                <form method="POST" action="/add_equipment/{{ site['id'] }}" class="add-eq-form">
+                    <input type="text" name="item" placeholder="Item (e.g., Excavator)" required>
+                    <input type="number" name="quantity" placeholder="Qty" required>
+                    <button type="submit">Add</button>
+                </form>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-data">
+                <p>No sites found. Add one above!</p>
+            </div>
+        {% endif %}
+
+        <div class="bottom-nav">
+            <a href="/"><span>🏠</span>Home</a>
+            <a href="/logistics" class="active"><span>🚚</span>Logistics</a>
+            <a href="/workers"><span>👷</span>Workers</a>
+            <a href="/fraud_prevention"><span>🛡️</span>Fraud Prev.</a>
+            <a href="/earnings"><span>📊</span>Reports</a>
+        </div>
+    </div>
+</body>
+</html>
